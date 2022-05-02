@@ -5,6 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
+import Fuse from "fuse.js";
 
 interface Video {
   id: string;
@@ -64,15 +65,21 @@ const App = () => {
   const handleSearchChange = (e: any) => {
     const query = e.target.value;
     if (query) {
-      const filteredVids = videos.reduce<Video[]>((vids: Video[], vid: Video) => {
-        const matches = vid.chapters.filter((chapter) =>
-          chapter.title.includes(query)
-        );
-        if (matches.length) {
-          vids.push({ ...vid, chapters: matches });
-        }
-        return vids;
-      }, []);
+      const filteredVids = videos.reduce<Video[]>(
+        (vids: Video[], vid: Video) => {
+          const fuse = new Fuse(vid.chapters, {
+            keys: ["title"],
+            threshold: 0.3,
+          });
+
+          const matches = fuse.search(query).map((match) => match.item);
+          if (matches.length) {
+            vids.push({ ...vid, chapters: matches });
+          }
+          return vids;
+        },
+        []
+      );
       setFilteredVideos(filteredVids);
     } else {
       setFilteredVideos(videos);
