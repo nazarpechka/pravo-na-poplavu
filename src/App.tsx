@@ -70,9 +70,16 @@ const App = () => {
           const fuse = new Fuse(vid.chapters, {
             keys: ["title"],
             threshold: 0.3,
+            ignoreLocation: true,
           });
 
-          const matches = fuse.search(query).map((match) => match.item);
+          const fuseMatches = fuse.search(query).map((match) => match.item);
+          const literalMatches = vid.chapters.filter(
+            (chapter) =>
+              !fuseMatches.some((match: any) => match.time === chapter.time) &&
+              chapter.title.toLowerCase().includes(query.toLowerCase())
+          );
+          const matches = literalMatches.concat(fuseMatches);
           if (matches.length) {
             vids.push({ ...vid, chapters: matches });
           }
