@@ -5,6 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import Fuse from "fuse.js";
 
 interface Video {
@@ -106,6 +107,15 @@ const App = () => {
             />{" "}
             Право на Поплаву
           </Navbar.Brand>
+          <Button variant="primary">
+            <a
+              href="https://savelife.in.ua/donate/"
+              target="_blank"
+              className="text-white text-decoration-none"
+            >
+              Донат на ЗСУ
+            </a>
+          </Button>
         </Container>
       </Navbar>
       <Container>
